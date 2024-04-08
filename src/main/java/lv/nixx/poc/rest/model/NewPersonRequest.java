@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.ToString;
@@ -16,11 +17,13 @@ import java.time.LocalDate;
 public class NewPersonRequest {
 
     @NotBlank(message = "Name is mandatory")
-    @Size(min = 3, message = "Minimum allowed 'name' is '3'")
+    @Size(min = 3, max = 50)
+    @Pattern(regexp = "^[A-Z][A-Za-z]+$")
     private final String name;
 
     @NotBlank(message = "Surname is mandatory")
-    @Size(min = 3, message = "Minimum allowed 'surname' is '3'")
+    @Size(min = 3, max = 50)
+    @Pattern(regexp = "^[A-Z][A-Za-z]+$")
     private final String surname;
 
     @NotNull

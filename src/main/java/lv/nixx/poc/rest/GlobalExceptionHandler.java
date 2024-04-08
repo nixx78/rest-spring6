@@ -28,7 +28,14 @@ public class GlobalExceptionHandler {
 
         BindingResult bindingResult = e.getBindingResult();
 
-        List<FieldValidationResponse> fieldValidationResponse = bindingResult.getFieldErrors()
+        //TODO Implement this part
+        List<String> collect = bindingResult.getGlobalErrors().stream()
+                    .map(t -> {
+                        System.out.println("-");
+                        return "";
+                    }).collect(toList());
+
+        List<FieldValidationResponse> fieldValidationErrors = bindingResult.getFieldErrors()
                 .stream()
                 .map(fieldError ->
                         FieldValidationResponse.builder()
@@ -39,7 +46,8 @@ public class GlobalExceptionHandler {
                                 .build()
                 ).toList();
 
-        return createResponseEntity(request, fieldValidationResponse);
+
+        return createResponseEntity(request, fieldValidationErrors);
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -51,8 +59,10 @@ public class GlobalExceptionHandler {
                 .map(t -> {
                     PathImpl p = (PathImpl) t.getPropertyPath();
                     NodeImpl leafNode = p.getLeafNode();
+                    Integer index = leafNode.getIndex();
+
                     return FieldValidationResponse.builder()
-                            .index(leafNode.getIndex())
+                            .index(index == null ? 0 : index)
                             .field(leafNode.getName())
                             .value(escapeValue(leafNode.getValue()))
                             .message(t.getMessage())
