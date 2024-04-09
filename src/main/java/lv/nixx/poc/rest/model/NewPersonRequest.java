@@ -16,13 +16,15 @@ import java.time.LocalDate;
 @Getter
 public class NewPersonRequest {
 
+    //TODO Create custom annotation for person fields
     @NotBlank(message = "Name is mandatory")
-    @Size(min = 3, max = 50)
+    @Size(min = 2, max = 50, message = "The person name '${validatedValue}' must be between {min} and {max} characters long")
     @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+
     private final String name;
 
     @NotBlank(message = "Surname is mandatory")
-    @Size(min = 3, max = 50)
+    @Size(min = 2, max = 50, message = "The person surname '${validatedValue}' must be between {min} and {max} characters long")
     @Pattern(regexp = "^[A-Z][A-Za-z]+$")
     private final String surname;
 

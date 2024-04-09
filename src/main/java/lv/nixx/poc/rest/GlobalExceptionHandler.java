@@ -9,6 +9,7 @@ import lombok.Getter;
 import org.apache.commons.text.StringEscapeUtils;
 import org.hibernate.validator.internal.engine.path.NodeImpl;
 import org.hibernate.validator.internal.engine.path.PathImpl;
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -16,6 +17,8 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.*;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.groupingBy;
 import static java.util.stream.Collectors.toList;
@@ -28,26 +31,35 @@ public class GlobalExceptionHandler {
 
         BindingResult bindingResult = e.getBindingResult();
 
-        //TODO Implement this part
-        List<String> collect = bindingResult.getGlobalErrors().stream()
-                    .map(t -> {
-                        System.out.println("-");
-                        return "";
-                    }).collect(toList());
+        List<String> globalErrors = bindingResult.getGlobalErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .toList();
 
-        List<FieldValidationResponse> fieldValidationErrors = bindingResult.getFieldErrors()
+        Collection<ObjectValidationResponse> fieldValidationErrors = bindingResult.getFieldErrors()
                 .stream()
                 .map(fieldError ->
-                        FieldValidationResponse.builder()
-                                .index(0)
-                                .field(fieldError.getField())
-                                .value(escapeValue(fieldError.getRejectedValue()))
-                                .message(fieldError.getDefaultMessage())
+                        {
+                            String value = escapeValue(fieldError.getRejectedValue());
+                            return ObjectValidationResponse.builder()
+                                    .field(fieldError.getField())
+                                    .value(value)
+                                    .message(fieldError.getDefaultMessage())
+                                    .build();
+                        }
+                ).collect(Collectors.toMap(ObjectValidationResponse::getField, Function.identity(), (t1, t2) ->
+                        ObjectValidationResponse.builder()
+                                .field(t1.field)
+                                .value(t1.value)
+                                .message(t1.message + ", " + t2.message)
                                 .build()
-                ).toList();
+                )).values();
 
-
-        return createResponseEntity(request, fieldValidationErrors);
+        return ResponseEntity.badRequest().body(MethodValidationResponse.builder()
+                .path(request.getRequestURI())
+                .httpMethod(request.getMethod())
+                .globalValidationErrors(globalErrors)
+                .fieldValidationErrors(fieldValidationErrors)
+                .build());
     }
 
     @ExceptionHandler(ConstraintViolationException.class)
@@ -55,21 +67,29 @@ public class GlobalExceptionHandler {
 
         Set<ConstraintViolation<?>> constraintViolations = e.getConstraintViolations();
 
-        Collection<FieldValidationResponse> fieldValidations = constraintViolations.stream()
+        Collection<ObjectValidationResponse> fieldValidations = constraintViolations.stream()
                 .map(t -> {
                     PathImpl p = (PathImpl) t.getPropertyPath();
                     NodeImpl leafNode = p.getLeafNode();
                     Integer index = leafNode.getIndex();
 
-                    return FieldValidationResponse.builder()
+                    String value = escapeValue(t.getInvalidValue());
+
+                    return ObjectValidationResponse.builder()
                             .index(index == null ? 0 : index)
                             .field(leafNode.getName())
-                            .value(escapeValue(leafNode.getValue()))
+                            .value(value)
                             .message(t.getMessage())
                             .build();
-                }).toList();
+                }).collect(Collectors.toMap(ObjectValidationResponse::getField, Function.identity(), (t1, t2) ->
+                        ObjectValidationResponse.builder()
+                                .field(t1.field)
+                                .value(t1.value)
+                                .message(t1.message + ", " + t2.message)
+                                .build()
+                )).values();
 
-        return createResponseEntity(request, fieldValidations);
+        return ResponseEntity.badRequest().body(new CollectionValidationResponse(request.getRequestURI(), request.getMethod(), fieldValidations));
     }
 
     private String escapeValue(Object v) {
@@ -83,28 +103,35 @@ public class GlobalExceptionHandler {
         return v.toString();
     }
 
-    private static ResponseEntity<Object> createResponseEntity(HttpServletRequest request, Collection<FieldValidationResponse> fieldValidationResponse) {
-        return ResponseEntity.badRequest().body(new ValidationResponse(request.getRequestURI(), request.getMethod(), fieldValidationResponse));
-    }
 
     @Getter
-    static class ValidationResponse {
+    static class CollectionValidationResponse {
         private final String path;
         private final String httpMethod;
 
-        private final Map<Integer, List<FieldValidationResponse>> fieldsResponse;
+        private final Map<Integer, List<ObjectValidationResponse>> fieldsResponse;
 
-        ValidationResponse(String path, String httpMethod, Collection<FieldValidationResponse> fieldsResponse) {
+        CollectionValidationResponse(String path, String httpMethod, Collection<ObjectValidationResponse> fieldsResponse) {
             this.path = path;
             this.httpMethod = httpMethod;
             this.fieldsResponse = fieldsResponse.stream()
-                    .collect(groupingBy(FieldValidationResponse::getIndex, TreeMap::new, toList()));
+                    .collect(groupingBy(ObjectValidationResponse::getIndex, TreeMap::new, toList()));
         }
     }
 
     @Getter
     @Builder
-    static class FieldValidationResponse {
+    static class MethodValidationResponse {
+        private final String path;
+        private final String httpMethod;
+
+        private final Collection<String> globalValidationErrors;
+        private final Collection<ObjectValidationResponse> fieldValidationErrors;
+    }
+
+    @Getter
+    @Builder
+    static class ObjectValidationResponse {
         @JsonIgnore
         private final int index;
         private final String field;

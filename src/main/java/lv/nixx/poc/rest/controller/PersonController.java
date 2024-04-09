@@ -3,6 +3,8 @@ package lv.nixx.poc.rest.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import lv.nixx.poc.rest.model.FindPersonsRequest;
 import lv.nixx.poc.rest.model.NewPersonRequest;
 import lv.nixx.poc.rest.model.PersonDTO;
@@ -50,11 +52,34 @@ public class PersonController {
         return personService.delete(id);
     }
 
-    @Operation(description = "Return all persons in birthdate in from - to range")
+    @Operation(description = "Find persons by parameters")
     @PostMapping("/find")
-    public Collection<PersonDTO> findPersonsInBirthdayRange(@RequestBody @Valid FindPersonsRequest findPersonsRequest
-    ) {
+    public Collection<PersonDTO> findPersons(@RequestBody @Valid FindPersonsRequest findPersonsRequest) {
         return null;
     }
+
+    @Operation(description = "Find persons by collection of parameters")
+    @PostMapping("/findAll")
+    public Collection<PersonDTO> findAllPersons(@RequestBody @Valid Collection<FindPersonsRequest> findPersonsRequest) {
+        return null;
+    }
+
+    @Operation(description = "Find persons by name and surname")
+    @GetMapping("/findAll/{name}/{surname}")
+    public String findAllBySurname(
+            @Valid
+            @PathVariable(name = "name")
+            @Size(min = 2, max = 50, message = "The person name '${validatedValue}' must be between {min} and {max} characters long")
+            @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+            String name,
+            @Valid
+            @PathVariable(name = "surname")
+            @Size(min = 2, max = 50, message = "The person surname '${validatedValue}' must be between {min} and {max} characters long")
+            @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+            String surname) {
+
+        return "Processed:" + name + ":" + surname;
+    }
+
 
 }
