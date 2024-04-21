@@ -2,19 +2,14 @@ package lv.nixx.poc.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.Getter;
-import lv.nixx.poc.rest.validation.collection.CollectionElement;
+import lv.nixx.poc.rest.validation.collection.CollectionElementRule;
 
 import java.util.Collection;
 
-@Getter
-public class RequestWithCollection {
 
-    @CollectionElement(pattern = "^[A-Z][A-Za-z]+$")
-    private final Collection<String> collectionWithCharacters;
-
-    @CollectionElement(pattern = "^[0-9]+$")
-    private final Collection<String> collectionWithNumbers;
+public record RequestWithCollection(
+        @CollectionElementRule(pattern = "^[A-Za-z]+$") Collection<String> collectionWithCharacters,
+        @CollectionElementRule(pattern = "^[0-9]+$") Collection<String> collectionWithNumbers) {
 
     @JsonCreator
     public RequestWithCollection(

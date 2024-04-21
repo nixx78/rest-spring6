@@ -8,12 +8,11 @@ import java.util.Collection;
 import java.util.Objects;
 import java.util.regex.Pattern;
 
-public class CollectionElementValidator implements ConstraintValidator<CollectionElement, Collection<String>> {
+public class CollectionElementValidator implements ConstraintValidator<CollectionElementRule, Collection<String>> {
 
     private Pattern pattern;
-
     @Override
-    public void initialize(CollectionElement constraintAnnotation) {
+    public void initialize(CollectionElementRule constraintAnnotation) {
         this.pattern = Pattern.compile(constraintAnnotation.pattern());
     }
 
@@ -34,7 +33,7 @@ public class CollectionElementValidator implements ConstraintValidator<Collectio
             context.disableDefaultConstraintViolation();
             context.buildConstraintViolationWithTemplate(("Collection elements not valid: [" +
                             String.join(",", validationErrors) +
-                            "]"))
+                            "] pattern [" + pattern.toString() + "]"))
                     .addConstraintViolation();
 
             return false;

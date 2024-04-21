@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
-import lv.nixx.poc.rest.validation.DateRange;
+import lv.nixx.poc.rest.validation.person.DateRange;
+import lv.nixx.poc.rest.validation.person.PersonNameSurname;
 
 import java.time.LocalDate;
 
@@ -16,7 +15,6 @@ import java.time.LocalDate;
 public class FindPersonsRequest {
 
     @NotNull
-
     @Schema(description = "From date (format: yyyy-MM-dd)", example = "2024-04-20")
     private final LocalDate from;
 
@@ -24,14 +22,10 @@ public class FindPersonsRequest {
     @NotNull
     private final LocalDate to;
 
-    @NotNull
-    @Size(min = 2, max = 50, message = "The person name '${validatedValue}' must be between {min} and {max} characters long")
-    @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+    @PersonNameSurname
     private final String name;
 
-    @NotNull
-    @Size(min = 2, max = 50, message = "The person surname '${validatedValue}' must be between {min} and {max} characters long")
-    @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+    @PersonNameSurname
     private final String surname;
 
     @JsonCreator

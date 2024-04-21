@@ -3,13 +3,12 @@ package lv.nixx.poc.rest.controller;
 import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lv.nixx.poc.rest.model.FindPersonsRequest;
 import lv.nixx.poc.rest.model.NewPersonRequest;
 import lv.nixx.poc.rest.model.PersonDTO;
 import lv.nixx.poc.rest.model.UpdatePersonRequest;
 import lv.nixx.poc.rest.service.PersonDAO;
+import lv.nixx.poc.rest.validation.person.PersonNameSurname;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -67,15 +66,11 @@ public class PersonController {
     @Operation(description = "Find persons by name and surname")
     @GetMapping("/findAll/{name}/{surname}")
     public String findAllBySurname(
-            @Valid
             @PathVariable(name = "name")
-            @Size(min = 2, max = 50, message = "The person name '${validatedValue}' must be between {min} and {max} characters long")
-            @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+            @PersonNameSurname
             String name,
-            @Valid
             @PathVariable(name = "surname")
-            @Size(min = 2, max = 50, message = "The person surname '${validatedValue}' must be between {min} and {max} characters long")
-            @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+            @PersonNameSurname
             String surname) {
 
         return "Processed:" + name + ":" + surname;

@@ -7,9 +7,9 @@ import java.lang.annotation.*;
 
 @Documented
 @Constraint(validatedBy = CollectionElementValidator.class)
-@Target({ElementType.FIELD})
+@Target({ElementType.FIELD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
-public @interface CollectionElement {
+public @interface CollectionElementRule {
     String message() default "Collection elements not valid";
     Class<?>[] groups() default {};
     Class<? extends Payload>[] payload() default {};

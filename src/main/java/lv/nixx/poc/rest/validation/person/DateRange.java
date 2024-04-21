@@ -1,4 +1,4 @@
-package lv.nixx.poc.rest.validation;
+package lv.nixx.poc.rest.validation.person;
 
 import jakarta.validation.Constraint;
 import jakarta.validation.Payload;

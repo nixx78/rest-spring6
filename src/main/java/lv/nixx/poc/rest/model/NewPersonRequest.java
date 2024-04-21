@@ -4,10 +4,9 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.ToString;
+import lv.nixx.poc.rest.validation.person.PersonNameSurname;
 
 import java.time.LocalDate;
 
@@ -16,16 +15,12 @@ import java.time.LocalDate;
 @Getter
 public class NewPersonRequest {
 
-    //TODO Create custom annotation for person fields
     @NotBlank(message = "Name is mandatory")
-    @Size(min = 2, max = 50, message = "The person name '${validatedValue}' must be between {min} and {max} characters long")
-    @Pattern(regexp = "^[A-Z][A-Za-z]+$")
-
+    @PersonNameSurname
     private final String name;
 
     @NotBlank(message = "Surname is mandatory")
-    @Size(min = 2, max = 50, message = "The person surname '${validatedValue}' must be between {min} and {max} characters long")
-    @Pattern(regexp = "^[A-Z][A-Za-z]+$")
+    @PersonNameSurname
     private final String surname;
 
     @NotNull
