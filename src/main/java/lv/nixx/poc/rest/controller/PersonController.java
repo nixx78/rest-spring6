@@ -7,12 +7,19 @@ import lv.nixx.poc.rest.model.FindPersonsRequest;
 import lv.nixx.poc.rest.model.NewPersonRequest;
 import lv.nixx.poc.rest.model.PersonDTO;
 import lv.nixx.poc.rest.model.UpdatePersonRequest;
+import lv.nixx.poc.rest.service.CSVService;
 import lv.nixx.poc.rest.service.PersonDAO;
 import lv.nixx.poc.rest.validation.person.PersonNameSurname;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.Collection;
 
 @RestController
@@ -21,10 +28,12 @@ import java.util.Collection;
 public class PersonController {
 
     private final PersonDAO personService;
+    private final CSVService csvService;
 
     @Autowired
-    public PersonController(PersonDAO personService) {
+    public PersonController(PersonDAO personService, CSVService csvService) {
         this.personService = personService;
+        this.csvService = csvService;
     }
 
     @Operation(description = "Add new Person")
@@ -76,5 +85,18 @@ public class PersonController {
         return "Processed:" + name + ":" + surname;
     }
 
+    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
+        csvService.saveFile(file);
+    }
+
+    @GetMapping("/download")
+    public ResponseEntity<byte[]> downloadFile() throws IOException {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.TEXT_PLAIN);
+        headers.setContentDispositionFormData("attachment", "persons.csv");
+
+        return new ResponseEntity<>(csvService.getDataForDownload(), headers, HttpStatus.OK);
+    }
 
 }
