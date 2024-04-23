@@ -91,10 +91,11 @@ public class PersonController {
     }
 
     @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadFile() throws IOException {
+    public ResponseEntity<byte[]> downloadFile(@RequestParam(name = "filename", required = false) String filename) throws IOException {
+
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.TEXT_PLAIN);
-        headers.setContentDispositionFormData("attachment", "persons.csv");
+        headers.setContentDispositionFormData("attachment", filename == null ? "persons.csv" : filename);
 
         return new ResponseEntity<>(csvService.getDataForDownload(), headers, HttpStatus.OK);
     }
