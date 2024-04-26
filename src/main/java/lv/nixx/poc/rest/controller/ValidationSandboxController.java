@@ -2,7 +2,7 @@ package lv.nixx.poc.rest.controller;
 
 import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.validation.Valid;
-import lv.nixx.poc.rest.model.RequestWithCollection;
+import lv.nixx.poc.rest.model.RequestWithCollections;
 import lv.nixx.poc.rest.validation.collection.CollectionElementRule;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -17,7 +17,7 @@ import java.util.Collection;
 public class ValidationSandboxController {
 
     @PostMapping("/poc/validateObject")
-    public String process(@Valid @RequestBody RequestWithCollection request) {
+    public String process(@Valid @RequestBody RequestWithCollections request) {
         return System.currentTimeMillis() + ": processed";
     }
 

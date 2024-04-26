@@ -18,8 +18,8 @@ public class DateRangeValidator implements ConstraintValidator<DateRange, FindPe
             return false;
         }
 
-        LocalDate startDate = request.getFrom();
-        LocalDate endDate = request.getTo();
+        LocalDate startDate = request.from();
+        LocalDate endDate = request.to();
 
         boolean isValid = startDate != null && endDate != null && startDate.isBefore(endDate);
 

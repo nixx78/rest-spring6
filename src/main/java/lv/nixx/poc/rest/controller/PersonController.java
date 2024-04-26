@@ -36,6 +36,12 @@ public class PersonController {
         this.csvService = csvService;
     }
 
+    @Operation(description = "Get person by primary id")
+    @GetMapping("/{id}")
+    public PersonDTO getPersonById(@PathVariable("id") @Min(1) Long id) {
+        return personService.getById(id);
+    }
+
     @Operation(description = "Add new Person")
     @PostMapping
     public PersonDTO addPerson(@RequestBody @Valid NewPersonRequest request) {

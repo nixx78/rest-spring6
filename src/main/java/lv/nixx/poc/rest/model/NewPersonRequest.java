@@ -23,7 +23,7 @@ public class NewPersonRequest {
     @PersonNameSurname
     private final String surname;
 
-    @NotNull
+    @NotNull(message = "Date of birth is mandatory")
     private final LocalDate dateOfBirth;
 
     @JsonCreator
