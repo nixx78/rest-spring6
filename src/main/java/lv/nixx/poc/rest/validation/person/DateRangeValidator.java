@@ -2,24 +2,24 @@ package lv.nixx.poc.rest.validation.person;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import lv.nixx.poc.rest.model.FindPersonsRequest;
+import lv.nixx.poc.rest.model.RequestWithDateRange;
 
 import java.time.LocalDate;
 
-public class DateRangeValidator implements ConstraintValidator<DateRange, FindPersonsRequest> {
+public class DateRangeValidator implements ConstraintValidator<DateRange, RequestWithDateRange> {
 
     @Override
     public void initialize(DateRange constraintAnnotation) {
     }
 
     @Override
-    public boolean isValid(FindPersonsRequest request, ConstraintValidatorContext context) {
+    public boolean isValid(RequestWithDateRange request, ConstraintValidatorContext context) {
         if (request == null) {
             return false;
         }
 
-        LocalDate startDate = request.from();
-        LocalDate endDate = request.to();
+        LocalDate startDate = request.getFrom();
+        LocalDate endDate = request.getTo();
 
         boolean isValid = startDate != null && endDate != null && startDate.isBefore(endDate);
 

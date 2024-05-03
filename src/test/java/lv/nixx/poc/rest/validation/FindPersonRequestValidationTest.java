@@ -15,7 +15,7 @@ public class FindPersonRequestValidationTest {
     private static final String DATE_RANGE_MESSAGE = "Date range [null] - [null]  not valid, end date must be greater that start date";
 
     @Test
-    void findPersonValidationTest() {
+    void validationFailTest() {
 
         assertAll(
                 () -> ValidationTester.create()
@@ -23,15 +23,30 @@ public class FindPersonRequestValidationTest {
                                 new ExpectedViolation(null, DATE_RANGE_MESSAGE),
                                 new ExpectedViolation("name", MUST_NOT_BE_NULL),
                                 new ExpectedViolation("surname", MUST_NOT_BE_NULL)
-                        ).validate(new FindPersonsRequest(null, null, null, null)),
+                        ).validate(new FindPersonsRequest()),
+
                 () -> ValidationTester.create()
                         .withExpectedViolations(
                                 new ExpectedViolation(null, DATE_RANGE_MESSAGE)
-                        ).validate(new FindPersonsRequest(null, null, "Name", "Surname")),
-                () -> ValidationTester.create()
-                        .validate(new FindPersonsRequest(LocalDate.parse("2024-01-01"), LocalDate.parse("2024-01-10"), "Name", "Surname"))
+                        ).validate(new FindPersonsRequest()
+                                .setName("Name")
+                                .setSurname("Surname")
+                        )
         );
 
+    }
+
+    @Test
+    void validationSuccessTest() {
+
+        FindPersonsRequest r = new FindPersonsRequest()
+                .setName("Name")
+                .setSurname("Surname");
+
+        r.setFrom(LocalDate.parse("2024-01-01"));
+        r.setTo(LocalDate.parse("2024-01-10"));
+
+        ValidationTester.create().validate(r);
     }
 
 

@@ -9,7 +9,9 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -33,9 +35,14 @@ class CollectionElementValidatorTest {
 
         Validator validator = factory.getValidator();
 
-        RequestWithCollections findPersonsRequest = new RequestWithCollections(List.of("1", "ABC"), List.of("X", "A", "1"));
+        RequestWithCollections r = new RequestWithCollections()
+                .setCollectionWithCharacters(List.of("1", "ABC"))
+                .setCollectionWithNumbers(List.of("X", "A", "1"));
 
-        List<String> violations = validator.validate(findPersonsRequest)
+        r.setFrom(LocalDate.parse("2024-01-01"));
+        r.setTo(LocalDate.parse("2024-01-02"));
+
+        List<String> violations = validator.validate(r)
                 .stream()
                 .map(ConstraintViolation::getMessage)
                 .toList();
@@ -49,9 +56,15 @@ class CollectionElementValidatorTest {
     void validationSuccessTest() {
         Validator validator = factory.getValidator();
 
-        RequestWithCollections findPersonsRequest = new RequestWithCollections(List.of("ABC"), List.of("1"));
+        RequestWithCollections requestWithCollections = new RequestWithCollections()
+                .setCollectionWithCharacters(List.of("ABC"))
+                .setCollectionWithNumbers(List.of("1"));
 
-        assertEquals(0, validator.validate(findPersonsRequest).size());
+        requestWithCollections.setFrom(LocalDate.parse("2024-01-01"));
+        requestWithCollections.setTo(LocalDate.parse("2024-01-02"));
+
+        Set<ConstraintViolation<RequestWithCollections>> validate = validator.validate(requestWithCollections);
+        assertEquals(0, validate.size());
     }
 
 }
