@@ -48,6 +48,12 @@ public class PersonController {
         return personService.addPerson(request);
     }
 
+    @Operation(description = "Add new Person")
+    @PostMapping("/bulk")
+    public Collection<PersonDTO> addBulkPerson(@RequestBody @Valid Collection<NewPersonRequest> request) {
+        return personService.addBulkPerson(request);
+    }
+
     @Operation(description = "Update new Person")
     @PutMapping
     public PersonDTO updatePerson(@RequestBody @Valid UpdatePersonRequest request) {

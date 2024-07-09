@@ -7,7 +7,10 @@ import lv.nixx.poc.rest.model.UpdatePersonRequest;
 import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Function;
@@ -39,6 +42,12 @@ public class PersonDAO {
         personMap.put(createdPerson.getId(), createdPerson);
 
         return createdPerson;
+    }
+
+    public Collection<PersonDTO> addBulkPerson(Collection<NewPersonRequest> request) {
+        return request.stream()
+                .map(this::addPerson)
+                .toList();
     }
 
     public PersonDTO getById(Long id) {
