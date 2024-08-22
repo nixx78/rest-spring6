@@ -14,8 +14,8 @@ public class AppInfoController {
     }
 
     @GetMapping("/appInfo")
-    public String getVersion() {
-        return appInfoProvider.getVersion();
+    public AppInfoProvider.AppInfo getVersion() {
+        return appInfoProvider.getInfo();
     }
 
 }

@@ -2,9 +2,8 @@ package lv.nixx.poc.rest;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
-
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
 @SpringBootApplication
 public class RestSpring6Application extends SpringBootServletInitializer {
@@ -15,6 +14,9 @@ public class RestSpring6Application extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
-        return application.sources(RestSpring6Application.class);
+        // This configuration will work only in case of we run our application on Tomcat server
+        return application.sources(RestSpring6Application.class)
+                .profiles("tomcat");
     }
+
 }
