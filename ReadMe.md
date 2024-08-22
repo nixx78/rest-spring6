@@ -5,7 +5,8 @@
 * Controller c различными HTTP методами
 * Использование валидации входных данных @Validate/@Valid
 * Перехват exception и формирование ответа
-* Запись версии в MANIFEST.MF и возврат при помощи REST(GET /version)
+* Запись версии в MANIFEST.MF и возврат при помощи REST(GET /appInfo)
+* Деплой приложения на Tomcat сервер с профилем
 
 ## Application endpoint:
 http://localhost:8080/rest-spring/swagger-ui/index.html
