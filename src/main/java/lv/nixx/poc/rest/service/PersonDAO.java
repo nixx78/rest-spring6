@@ -1,6 +1,6 @@
 package lv.nixx.poc.rest.service;
 
-import lv.nixx.poc.rest.PersonNotFoundException;
+import lv.nixx.poc.rest.exception.PersonNotFoundException;
 import lv.nixx.poc.rest.model.NewPersonRequest;
 import lv.nixx.poc.rest.model.PersonDTO;
 import lv.nixx.poc.rest.model.UpdatePersonRequest;

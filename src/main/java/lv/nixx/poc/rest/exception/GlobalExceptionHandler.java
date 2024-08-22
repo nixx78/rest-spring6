@@ -1,4 +1,4 @@
-package lv.nixx.poc.rest;
+package lv.nixx.poc.rest.exception;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.servlet.http.HttpServletRequest;
