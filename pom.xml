@@ -90,6 +90,7 @@
                     <archive>
                         <manifestEntries>
                             <Version>${project.version}</Version>
+                            <Implementation-Build>${maven.build.timestamp}</Implementation-Build>
                         </manifestEntries>
                     </archive>
                 </configuration>

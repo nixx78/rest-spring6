@@ -1,6 +1,7 @@
 package lv.nixx.poc.rest.service;
 
-import lombok.AllArgsConstructor;
+import jakarta.servlet.ServletContext;
+import lombok.Builder;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,16 +10,28 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.io.InputStream;
 import java.net.InetAddress;
-import java.util.Optional;
-import java.util.Properties;
+import java.util.jar.Attributes;
+import java.util.jar.Manifest;
 
 @Service
 public class AppInfoProvider {
 
     static final Logger log = LoggerFactory.getLogger(AppInfoProvider.class);
 
+    private final ServletContext context;
+
+    public AppInfoProvider(ServletContext context) {
+        this.context = context;
+    }
+
     public AppInfo getInfo() {
-        return new AppInfo(getHost(), getVersion());
+        AppInfo.AppInfoBuilder builder =
+                AppInfo.builder()
+                        .host(getHost());
+
+        setDataFromManifest(builder);
+
+        return builder.build();
     }
 
     private String getHost() {
@@ -30,24 +43,32 @@ public class AppInfoProvider {
         return "N/A";
     }
 
-    public String getVersion() {
-        InputStream is = this.getClass().getClassLoader().getResourceAsStream("META-INF/MANIFEST.MF");
-
-        Properties prop = new Properties();
+    private void setDataFromManifest(AppInfo.AppInfoBuilder builder) {
+        String version = "N/A";
+        String timestmap = "N/A";
         try {
-            prop.load(is);
-            return Optional.ofNullable(prop.get("Version")).map(String::valueOf).orElse("N/A");
-        } catch (IOException ex) {
-            log.error("Error retrieving data from Manifest", ex);
+            InputStream manifestStream = context.getResourceAsStream("/META-INF/MANIFEST.MF");
+            if (manifestStream != null) {
+                Manifest manifest = new Manifest(manifestStream);
+                Attributes attributes = manifest.getMainAttributes();
+
+                version = attributes.getValue("Version");
+                timestmap = attributes.getValue("Implementation-Build");
+            }
+        } catch (IOException e) {
+            log.error("Can't retrieve data from MANIFEST file");
         }
-        return "N/A";
+
+        builder.version(version);
+        builder.timestamp(timestmap);
     }
 
-    @AllArgsConstructor
+    @Builder
     @Getter
     public static class AppInfo {
         private final String host;
         private final String version;
+        private final String timestamp;
     }
 
 }
