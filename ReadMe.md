@@ -7,6 +7,7 @@
 * Перехват exception и формирование ответа
 * Запись версии в MANIFEST.MF и возврат при помощи REST(GET /appInfo)
 * Деплой приложения на Tomcat сервер с профилем
+* Создание контролера "на лету" в конфигурационном файле (регистрация в RequestMappingHandlerMapping)
 
 ## Application endpoint:
 http://localhost:8080/rest-spring/swagger-ui/index.html

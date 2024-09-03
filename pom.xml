@@ -18,7 +18,6 @@
 
     <properties>
         <java.version>17</java.version>
-        <start-class>lv.nixx.poc.rest.RestSpring6Application</start-class>
     </properties>
 
     <dependencies>
