@@ -18,13 +18,13 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Component
-public class PersonDAO {
+public class PersonService {
 
     private static final AtomicInteger id = new AtomicInteger();
     private final Map<Long, PersonDTO> personMap = new ConcurrentHashMap<>();
     private final Map<UUID, Integer[]> removeBatch = new HashMap<>();
 
-    public PersonDAO() {
+    public PersonService() {
 
         Map<Long, PersonDTO> v = Stream.of(
                 new PersonDTO(1L, "name1", "surname1", LocalDate.parse("1978-10-05")),
@@ -65,7 +65,7 @@ public class PersonDAO {
     }
 
     public PersonDTO update(UpdatePersonRequest request) {
-        PersonDTO person = new PersonDTO(id.incrementAndGet(), request.getName(), request.getSurname(), request.getDateOfBirth());
+        PersonDTO person = new PersonDTO(request.getId(), request.getName(), request.getSurname(), request.getDateOfBirth());
 
         personMap.put(person.getId(), person);
 
@@ -75,20 +75,5 @@ public class PersonDAO {
     public Collection<PersonDTO> getAllPersons() {
         return personMap.values();
     }
-
-    public UUID addToDeleteBatch(Integer[] ids) {
-        UUID batchId = UUID.randomUUID();
-        removeBatch.put(batchId, ids);
-        return batchId;
-    }
-
-    public boolean isBatchExists(UUID batchId) {
-        return removeBatch.containsKey(batchId);
-    }
-
-    public Integer[] deletePersonBatch(UUID batchId) {
-        return removeBatch.remove(batchId);
-    }
-
 
 }

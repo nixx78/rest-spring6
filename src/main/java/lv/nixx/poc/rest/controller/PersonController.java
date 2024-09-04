@@ -8,7 +8,7 @@ import lv.nixx.poc.rest.model.NewPersonRequest;
 import lv.nixx.poc.rest.model.PersonDTO;
 import lv.nixx.poc.rest.model.UpdatePersonRequest;
 import lv.nixx.poc.rest.service.CSVService;
-import lv.nixx.poc.rest.service.PersonDAO;
+import lv.nixx.poc.rest.service.PersonService;
 import lv.nixx.poc.rest.validation.person.PersonNameSurname;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -27,11 +27,11 @@ import java.util.Collection;
 @RequestMapping("/person")
 public class PersonController {
 
-    private final PersonDAO personService;
+    private final PersonService personService;
     private final CSVService csvService;
 
     @Autowired
-    public PersonController(PersonDAO personService, CSVService csvService) {
+    public PersonController(PersonService personService, CSVService csvService) {
         this.personService = personService;
         this.csvService = csvService;
     }

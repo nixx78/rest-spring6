@@ -26,10 +26,10 @@ public class CSVService {
 
     private final CSVFormat csvFormatToRead;
     private final CSVFormat csvFormatToWrite;
-    private final PersonDAO personDAO;
+    private final PersonService personService;
 
-    public CSVService(PersonDAO personDAO) {
-        this.personDAO = personDAO;
+    public CSVService(PersonService personService) {
+        this.personService = personService;
 
         this.csvFormatToRead = CSVFormat.DEFAULT.builder()
                 .setHeader("Name", "Surname", "DateOfBirth")
@@ -52,7 +52,7 @@ public class CSVService {
                 .map(t -> new NewPersonRequest(t.get("Name"), t.get("Surname"), LocalDate.parse(t.get("DateOfBirth"))))
                 .toList();
 
-        dtos.forEach(personDAO::addPerson);
+        dtos.forEach(personService::addPerson);
     }
 
     public byte[] getDataForDownload() throws IOException {
@@ -61,7 +61,7 @@ public class CSVService {
         OutputStreamWriter writer = new OutputStreamWriter(outputStream, StandardCharsets.UTF_8);
 
         try (CSVPrinter csvPrinter = new CSVPrinter(writer, csvFormatToWrite)) {
-            for (PersonDTO p : personDAO.getAllPersons()) {
+            for (PersonDTO p : personService.getAllPersons()) {
                 csvPrinter.printRecord(p.getId(), p.getName(), p.getSurname(), p.getDateOfBirth());
             }
         }
