@@ -7,4 +7,5 @@ services:
       - '80:8080'
     volumes:
       - ./rest-spring.war:/usr/local/tomcat/webapps/rest-spring.war
+      - ./exchange:/usr/local/tomcat/exchange
 

@@ -10,3 +10,4 @@ target/
 *.ipr
 
 *.war
+/docker/tomcat/exchange/

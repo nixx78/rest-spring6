@@ -8,6 +8,10 @@
 * Запись версии в MANIFEST.MF и возврат при помощи REST(GET /appInfo)
 * Деплой приложения на Tomcat сервер с профилем
 * Создание контролера "на лету" в конфигурационном файле (регистрация в RequestMappingHandlerMapping)
+* Контроллер для операций с файлами
+    * Upload файла с сохранением 
+    * Download файла из файловой системы
+    * Получение списка файлов из директории
 
 ## Application endpoint:
 http://localhost:8080/rest-spring/swagger-ui/index.html
