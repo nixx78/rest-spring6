@@ -1,7 +1,10 @@
 # Приложение для демонстрации использования Spring REST 
+Приложение "песочница" для примеров REST и запуска приложения в Docker контейнерах.
+
 * Запуск приложения из WAR (embedded Tomcat) локально 
 * Запуск приложения на Tomcat (Docker - tomcat)
 * Запуск приложения из WAR (Docker - jvm_alpine)
+* Запуск приложения из WAR (Docker - composite (dockerfile + docker-compose))
 
 ## Основные случаи использования
 * Controller c различными HTTP методами
@@ -15,16 +18,14 @@
     * Download файла из файловой системы
     * Получение списка файлов из директории
 
-## Application endpoint:
-http://localhost:8080/rest-spring/swagger-ui/index.html
-
 ## Запуск приложения из WAR  
 Необходимо, чтобы например протестировать извлечение версии их MANIFEST файла: java -jar rest-spring6-0.0.1-SNAPSHOT.war
 
-## Пути для доступа к приложению
-- Local run: http://localhost:8080/rest-spring/swagger-ui.html
-- Docker run: http://localhost:8081/rest-spring/swagger-ui.html
-- Tomcat on docker: http://localhost/rest-spring/swagger-ui.html
+## Application endpoints
+- Embedded Tomcat Local: http://localhost:8080/rest-spring/swagger-ui.html
+- Embedded Tomcat on Docker: http://localhost:8081/rest-spring/swagger-ui.html
+- Tomcat on Docker: http://localhost/rest-spring/swagger-ui.html
+- Tomcat on Docker (Docker file + Compose): http://localhost:88/rest-spring/swagger-ui.html
 
 ## Cылки
 * https://spring.io/guides/gs/spring-boot-docker/

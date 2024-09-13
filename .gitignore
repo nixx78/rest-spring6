@@ -12,3 +12,5 @@ target/
 *.war
 /docker/tomcat/exchange/
 /docker/jvm_alpine/exchange/
+/docker/composite/exchange/
+/docker/exchange/

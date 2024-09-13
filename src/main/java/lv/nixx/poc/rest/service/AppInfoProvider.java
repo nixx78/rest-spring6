@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,9 +20,11 @@ public class AppInfoProvider {
     static final Logger log = LoggerFactory.getLogger(AppInfoProvider.class);
 
     private final ServletContext context;
+    private final Environment environment;
 
-    public AppInfoProvider(ServletContext context) {
+    public AppInfoProvider(ServletContext context, Environment environment) {
         this.context = context;
+        this.environment = environment;
     }
 
     public AppInfo getInfo() {
@@ -59,8 +62,9 @@ public class AppInfoProvider {
             log.error("Can't retrieve data from MANIFEST file");
         }
 
-        builder.version(version);
-        builder.timestamp(timestmap);
+        builder.version(version)
+                .timestamp(timestmap)
+                .profile(environment.getActiveProfiles());
     }
 
     @Builder
@@ -69,6 +73,7 @@ public class AppInfoProvider {
         private final String host;
         private final String version;
         private final String timestamp;
+        private final String[] profile;
     }
 
 }

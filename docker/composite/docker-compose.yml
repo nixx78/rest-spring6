@@ -1,0 +1,12 @@
+name: composite-docker
+services:
+  rest-spring-app:
+    build: .
+    container_name: rest-spring-container
+    ports:
+      - '88:8080'
+    volumes:
+      - ./../_exchange:/rest-spring/exchange
+      - ./logs:/rest-spring/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=composite
