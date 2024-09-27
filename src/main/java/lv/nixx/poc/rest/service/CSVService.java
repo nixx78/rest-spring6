@@ -49,7 +49,7 @@ public class CSVService {
         CSVParser records = csvFormatToRead.parse(new StringReader(new String(file.getBytes())));
 
         List<NewPersonRequest> dtos = StreamSupport.stream(records.spliterator(), false)
-                .map(t -> new NewPersonRequest(t.get("Name"), t.get("Surname"), LocalDate.parse(t.get("DateOfBirth"))))
+                .map(t -> new NewPersonRequest(t.get("Name"), t.get("Surname"), LocalDate.parse(t.get("DateOfBirth")), t.get("Type")))
                 .toList();
 
         dtos.forEach(personService::addPerson);

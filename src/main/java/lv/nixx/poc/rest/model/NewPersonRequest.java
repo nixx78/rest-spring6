@@ -1,9 +1,9 @@
 package lv.nixx.poc.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import lombok.Getter;
 import lombok.ToString;
 import lv.nixx.poc.rest.validation.person.PersonNameSurname;
@@ -26,15 +26,20 @@ public class NewPersonRequest {
     @NotNull(message = "Date of birth is mandatory")
     private final LocalDate dateOfBirth;
 
+    @Pattern(regexp = "^[^|]*$", message = "Character '|' not allowed")
+    private final String type;
+
     @JsonCreator
     public NewPersonRequest(
-            @JsonProperty("name") String name,
-            @JsonProperty("surname") String surname,
-            @JsonProperty("dateOfBirth") LocalDate dateOfBirth
+            String name,
+            String surname,
+            LocalDate dateOfBirth,
+            String type
     ) {
         this.name = name;
         this.surname = surname;
         this.dateOfBirth = dateOfBirth;
+        this.type = type;
     }
 
 }

@@ -1,14 +1,12 @@
 package lv.nixx.poc.rest.model;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.NotNull;
 import lombok.Getter;
 import lombok.ToString;
 import lombok.experimental.Accessors;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @ToString
 @Getter
@@ -20,12 +18,13 @@ public class UpdatePersonRequest extends NewPersonRequest {
 
     @JsonCreator
     public UpdatePersonRequest(
-            @JsonProperty("id") Long id,
-            @JsonProperty("name") String name,
-            @JsonProperty("surname") String surname,
-            @JsonProperty("dateOfBirth") LocalDate dateOfBirth
+            Long id,
+            String name,
+            String surname,
+            LocalDate dateOfBirth,
+            String type
     ) {
-        super(name, surname, dateOfBirth);
+        super(name, surname, dateOfBirth, type);
         this.id = id;
     }
 
