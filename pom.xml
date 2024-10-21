@@ -77,6 +77,11 @@
 
     <build>
         <plugins>
+
+            <!--
+             This plugin needed only in case if we want to run application from WAR file. If we want
+             to deploy application to Tomcat we can remove this plugin
+            -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
