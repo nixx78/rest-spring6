@@ -19,6 +19,7 @@
     * Upload файла с сохранением 
     * Download файла из файловой системы
     * Получение списка файлов из директории
+* JacksonConfig - Регистрация модуля для особой десериализации строк в JSON. Удаление пробелов в начале и конце строки
 
 ## Application endpoints
 - Embedded Tomcat Local: http://localhost:8080/rest-spring/swagger-ui.html
