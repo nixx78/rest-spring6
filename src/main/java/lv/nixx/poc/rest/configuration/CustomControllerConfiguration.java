@@ -1,5 +1,7 @@
 package lv.nixx.poc.rest.configuration;
 
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.annotation.Bean;
@@ -20,9 +22,17 @@ public class CustomControllerConfiguration {
     public Object myHelloController(RequestMappingHandlerMapping handlerMapping) throws NoSuchMethodException {
 
         Object controller = new Object() {
-            // Код, который будет вызыватся при REST запросе
-            public ResponseEntity<String> sayHello() {
-                return ResponseEntity.ok("Hello, World!");
+
+            // Код, который будет вызываться при REST запросе
+            public ResponseEntity<ResponseDTO> sayHello() {
+                return ResponseEntity.ok(new ResponseDTO("Hello, World!", System.currentTimeMillis()));
+            }
+
+            @AllArgsConstructor
+            @Getter
+            static class ResponseDTO {
+                String message;
+                Long timestamp;
             }
         };
 

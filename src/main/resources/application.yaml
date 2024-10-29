@@ -29,13 +29,3 @@ server:
   error:
     include-message: always
     include-binding-errors: always
-
-info:
-  app:
-    name: "restfull-spring"
-    description: "Restfull Sample Spring application"
-    version: '@project.version@'
-
-app:
-  version: '@project.version@'
-
