@@ -10,8 +10,7 @@
     </appender>
 
     <!-- ============== Size and Time based Rolling file appenders section ============== -->
-    <appender name="FileMain"
-              class="ch.qos.logback.core.rolling.RollingFileAppender">
+    <appender name="FileMain" class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_DIR}/restapp.log</file>
         <encoder>
             <pattern>${PATTERN}</pattern>
@@ -19,7 +18,7 @@
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
             <fileNamePattern>${LOG_DIR}/restapp.%d{yyyy-MM-dd}.%i.log
             </fileNamePattern>
-            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFileNamingAndTriggeringPolicy">
                 <maxFileSize>1MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
             <maxHistory>5</maxHistory>

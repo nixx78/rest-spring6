@@ -1,4 +1,17 @@
-# Общиие сведения о Docker
+# Общие сведения о Docker
+
+## Структура примеров docker
+
+## Composite
+
+Пример использования, в котором используется комбинированный способ сборки: Docker + compose.yml. В качестве
+артефакта используется Spring Boot REST приложение с Embedded Tomcat.
+
+## jvm_alpine
+Пример использования, в котором image создается только при помощи Docker файла
+
+## tomcat
+Пример использования, в котором создается image с tomcat при помощи compose.yml
 
 ## Network
 - Create network: _docker network create **docker-net**_
@@ -10,7 +23,9 @@
   _docker build -t <IMAGE_NAME> ._
 
 - Run Docker:
--docker run  -v .\exchange:/rest-spring/exchange --name <CONTAINER_NAME> -d -h=webserver -p 8081:8080 <IMAGE_NAME>
+ - docker run <IMAGE_ID>
+
+- docker run  -v .\exchange:/rest-spring/exchange --name <CONTAINER_NAME> -d -h=webserver -p 8081:8080 <IMAGE_NAME>
 
 - Run Docker with volume mapper:
   
