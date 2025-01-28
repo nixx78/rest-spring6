@@ -11,7 +11,7 @@
 
     <groupId>lv.nixx.poc</groupId>
     <artifactId>rest-spring6</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <packaging>war</packaging>
     <name>rest-spring6</name>
     <description>Spring Boot RestSandbox</description>

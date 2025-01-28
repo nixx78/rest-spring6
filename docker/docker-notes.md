@@ -1,17 +1,16 @@
-# Общие сведения о Docker
+# Общие сведения о Docker & примеры использования
 
 ## Структура примеров docker
 
-## Composite
+### Embedded Tomcat
+В данной директории собрано 3 примера.
+* Запуск image из Docker файла при помощи команды docker run (buil_and_run.bat)
+* Запуск image при помощи Dockerfile + docker-compose.yaml (docker compose up -d)
+* Запуск image при помощи docker-compose.yaml при этом, image берется из repository (runtime_using_compose)
 
-Пример использования, в котором используется комбинированный способ сборки: Docker + compose.yml. В качестве
-артефакта используется Spring Boot REST приложение с Embedded Tomcat.
-
-## jvm_alpine
-Пример использования, в котором image создается только при помощи Docker файла
-
-## tomcat
+### tomcat
 Пример использования, в котором создается image с tomcat при помощи compose.yml
+
 
 ## Network
 - Create network: _docker network create **docker-net**_

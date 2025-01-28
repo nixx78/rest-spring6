@@ -12,7 +12,7 @@ RUN mkdir ${APP_FOLDER}/exchange
 COPY ${WAR_FILE} ${APP_FOLDER}/${WAR_FILE}
 
 COPY ./data/images/ /${APP_FOLDER}/images/
-COPY ./data/exchange/ /${APP_FOLDER}/exchange/
+COPY ./_exchange/ /${APP_FOLDER}/exchange/
 
 WORKDIR /${APP_FOLDER}
 

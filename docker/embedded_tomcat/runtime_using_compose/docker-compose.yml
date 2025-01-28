@@ -1,0 +1,13 @@
+# Запуск приложения из image который был уже, был собран.
+name: composite-docker_runtime
+services:
+  rest-spring-app:
+    image: nixx/rest-spring-embedded-image:latest
+    container_name: rest-spring-container
+    ports:
+      - '88:8080'
+    volumes:
+      - ../../_exchange:/rest-spring/exchange
+      - ./logs:/rest-spring/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=composite

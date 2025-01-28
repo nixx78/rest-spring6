@@ -32,6 +32,6 @@
 * https://medium.com/holisticon-consultants/dont-build-fat-jars-for-docker-applications-6252a5571248
 
 ## Примечания
-* spring-boot-maven-plugin - нужен только для запуска приложения из WAR файла, если приложения будет
-деплоится на Tomcat сервер, то данных плагин можно не включать. 
+spring-boot-maven-plugin - нужен только для запуска приложения из WAR файла, если приложения будет
+развертываться на Tomcat сервере, то данных плагин можно не включать. 
 

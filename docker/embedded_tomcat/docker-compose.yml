@@ -1,0 +1,13 @@
+# In this sample we combine two approaches: Create image using Dockerfile and run image using compose file.
+name: composite-docker_runtime
+services:
+  rest-spring-app:
+    build: .
+    container_name: rest-spring-container
+    ports:
+      - '88:8080'
+    volumes:
+      - ./_exchange:/rest-spring/exchange
+      - ./logs_composite:/rest-spring/logs
+    environment:
+      - SPRING_PROFILES_ACTIVE=composite
