@@ -16,4 +16,4 @@ COPY ./_exchange/ /${APP_FOLDER}/exchange/
 
 WORKDIR /${APP_FOLDER}
 
-ENTRYPOINT ["java", "-jar", "rest-spring.war"]
+ENTRYPOINT ["java", "-jar", "rest-spring.war", "app.arg1, app.arg2"]

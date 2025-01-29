@@ -10,7 +10,7 @@ spring:
 
   web:
     resources:
-      static-locations: file:/rest-spring/images
+      static-locations: file:./data/images
 
 management:
   endpoints:

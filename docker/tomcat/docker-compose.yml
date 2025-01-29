@@ -9,6 +9,7 @@ services:
     volumes:
       - ./rest-spring.war:/usr/local/tomcat/webapps/rest-spring.war
       - ./_exchange:/usr/local/tomcat/exchange
+      - ./data:/usr/local/tomcat/data
       - ./logs:/usr/local/tomcat/logs
     environment:
       - SPRING_PROFILES_ACTIVE=dev

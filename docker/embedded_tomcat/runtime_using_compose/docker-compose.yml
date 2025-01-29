@@ -2,8 +2,14 @@
 name: composite-docker_runtime
 services:
   rest-spring-app:
+    # В параметре image нужно указать название image которое необходимо запустить
     image: nixx/rest-spring-embedded-image:latest
     container_name: rest-spring-container
+    # При помощи параметра entrypoint можно заменить команду вызова, которая была определенна в Dockerfile
+    entrypoint: [ "java", "-jar", "rest-spring.war", "app.newArg1", "app.newArg2" ]
+
+    # Если мы добавим параметр command то, данные параметры будут добавлены к уже существующим
+    #    command: ["addionalArg1", "addionalArg2" ]
     ports:
       - '88:8080'
     volumes:
@@ -11,3 +17,4 @@ services:
       - ./logs:/rest-spring/logs
     environment:
       - SPRING_PROFILES_ACTIVE=composite
+
