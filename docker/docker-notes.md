@@ -11,35 +11,19 @@
 ### tomcat
 Пример использования, в котором создается image с tomcat при помощи compose.yml
 
-
 ## Network
 - Create network: _docker network create **docker-net**_
 - Info about network:  _docker network inspect **docker-net**_
 - Получение списка сетей: _docker network ls_
 
 ## Docker
-- Build Docker image:
-  _docker build -t <IMAGE_NAME> ._
-
-- Run Docker:
- - docker run <IMAGE_ID>
-
-- docker run  -v .\exchange:/rest-spring/exchange --name <CONTAINER_NAME> -d -h=webserver -p 8081:8080 <IMAGE_NAME>
-
-- Run Docker with volume mapper:
-  
-- Stop Docker:
-  _docker stop CONTAINER_NAME> _
-
-- Remove Docker:
-  _docker rm CONTAINER_NAME> _
-
-- Получение информации о контейнерах
-_docker ps_  _docker ps_
-
-- Console for Application
-  _docker exec -it CONTAINER_NAME> /bin/sh_
-
-- Получение информации о image: _docker image ls_ 
-
-
+- Сборка Docker image из докер файла, который находится в локальный директории: _docker build -t <IMAGE_NAME> ._
+- Запуск Docker image: _docker run <IMAGE_ID>_
+- Stop Docker container: _docker stop CONTAINER_NAME> _
+- Remove Docker container:  _docker rm CONTAINER_NAME> _
+- Получение информации о контейнерах: _docker ps_  _docker ps_
+- Console for Application: _docker exec -it CONTAINER_NAME> /bin/sh_
+- Получение информации о image: _docker image ls_
+- Получение списка image в локальном хранилище: _docker images_
+- Запуск из compose файла: _docker compose up -d_
+- Остановка при запуске из compose файла: _docker compose down_
