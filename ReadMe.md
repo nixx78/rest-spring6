@@ -34,25 +34,3 @@
 spring-boot-maven-plugin - нужен только для запуска приложения из WAR файла, если приложения будет
 развертываться на Tomcat сервере, то данных плагин можно не включать. 
 
-# Работа с Docker repository
-
-## Работа с image в репозиторий Docker Hub
-**Общий вид команд**  
-* docker tag <local-image>:<tagname> <remote-repo>:<tagname>  
-* docker push <remote-repo>:<tagname>
-
-**Пример**  
-* docker tag nixx/rest-spring-embedded-image:latest nixx78/sandbox:latest  
-* docker push nixx78/sandbox:latest
-
-## Получение image из репозитория
-**Общий вид команд**
-* docker push <remote-repo>:<tagname>
-
-**Пример**  
-* docker pull nixx78/sandbox:latest  
-* После команды pull, можно проверить наличие image при помощи команды docker images
-
-**Запуск**
-Перед запуском при помощи docker-compose файла, можно получить свежий образ
-при помощи команды docker-compose pull
