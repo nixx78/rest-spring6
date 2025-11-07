@@ -54,7 +54,7 @@ public class PersonController {
         return personService.addBulkPerson(request);
     }
 
-    @Operation(description = "Update new Person")
+    @Operation(description = "Update Person")
     @PutMapping
     public PersonDTO updatePerson(@RequestBody @Valid UpdatePersonRequest request) {
         return personService.update(request);
