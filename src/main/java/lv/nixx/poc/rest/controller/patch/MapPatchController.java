@@ -1,4 +1,4 @@
-package lv.nixx.poc.rest.controller;
+package lv.nixx.poc.rest.controller.patch;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -12,9 +12,9 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/sample/patch")
-public class PatchController {
+public class MapPatchController {
 
-    private static final Logger log = LoggerFactory.getLogger(PatchController.class);
+    private static final Logger log = LoggerFactory.getLogger(MapPatchController.class);
 
     @PatchMapping("/{id}")
     @Operation(summary = "Partial entity update")
