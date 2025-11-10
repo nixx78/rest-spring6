@@ -44,11 +44,13 @@ public class PersonController {
 
     @Operation(description = "Add new Person")
     @PostMapping
-    public PersonDTO addPerson(@RequestBody @Valid NewPersonRequest request) {
-        return personService.addPerson(request);
+    public ResponseEntity<PersonDTO> addPerson(@RequestBody @Valid NewPersonRequest request) {
+        PersonDTO savedPerson = personService.addPerson(request);
+
+        return new ResponseEntity<>(savedPerson, HttpStatus.CREATED);
     }
 
-    @Operation(description = "Add new Person")
+    @Operation(description = "Add bulk of new Persons")
     @PostMapping("/bulk")
     public Collection<PersonDTO> addBulkPerson(@RequestBody @Valid Collection<NewPersonRequest> request) {
         return personService.addBulkPerson(request);
@@ -86,7 +88,7 @@ public class PersonController {
 
     @Operation(description = "Find persons by name and surname")
     @GetMapping("/findAll/{name}/{surname}")
-    public String findAllBySurname(
+    public String findAllByDetails(
             @PathVariable(name = "name")
             @PersonNameSurname
             String name,

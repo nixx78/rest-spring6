@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @Component
 public class PersonService {
 
-    private static final AtomicInteger id = new AtomicInteger();
+    private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
     private final Map<Long, PersonDTO> personMap = new ConcurrentHashMap<>();
     private final Map<UUID, Integer[]> removeBatch = new HashMap<>();
 
@@ -38,7 +38,7 @@ public class PersonService {
     }
 
     public PersonDTO addPerson(NewPersonRequest request) {
-        PersonDTO createdPerson = new PersonDTO(id.incrementAndGet(), request.getName(), request.getSurname(), request.getDateOfBirth());
+        PersonDTO createdPerson = new PersonDTO(ID_GENERATOR.incrementAndGet(), request.getName(), request.getSurname(), request.getDateOfBirth());
         personMap.put(createdPerson.getId(), createdPerson);
 
         return createdPerson;
@@ -54,22 +54,23 @@ public class PersonService {
         if (personMap.containsKey(id)) {
             return personMap.get(id);
         }
-        throw new PersonNotFoundException("Person with id [" + id + "] not found");
+        throw new PersonNotFoundException(id);
     }
 
     public PersonDTO delete(Long id) {
         if (personMap.containsKey(id)) {
             return personMap.remove(id);
         }
-        throw new PersonNotFoundException("Person with id [" + id + "] not found");
+        throw new PersonNotFoundException(id);
     }
 
-    public PersonDTO update(UpdatePersonRequest request) {
-        PersonDTO person = new PersonDTO(request.getId(), request.getName(), request.getSurname(), request.getDateOfBirth());
+    public PersonDTO update(UpdatePersonRequest updateRequest) {
 
-        personMap.put(person.getId(), person);
-
-        return person;
+        Long personId = updateRequest.getId();
+        if (!personMap.containsKey(personId)) {
+            throw new PersonNotFoundException(personId);
+        }
+        return personMap.computeIfPresent(personId, (k, v) -> new PersonDTO(personId, updateRequest.getName(), updateRequest.getSurname(), updateRequest.getDateOfBirth()));
     }
 
     public Collection<PersonDTO> getAllPersons() {
