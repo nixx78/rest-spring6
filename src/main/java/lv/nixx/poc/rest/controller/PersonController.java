@@ -1,6 +1,8 @@
 package lv.nixx.poc.rest.controller;
 
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Min;
 import lv.nixx.poc.rest.model.FindPersonsRequest;
@@ -21,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Map;
 
 @RestController
 @Validated
@@ -70,8 +73,10 @@ public class PersonController {
 
     @Operation(description = "Delete person")
     @DeleteMapping
-    public PersonDTO deletePerson(@RequestParam @Valid @Min(value = 1, message = "Id must be greater than zero") Long id) {
-        return personService.delete(id);
+    public HttpStatus deletePerson(@RequestParam @Valid @Min(value = 1, message = "Id must be greater than zero") Long id) {
+        personService.delete(id);
+
+        return HttpStatus.NO_CONTENT;
     }
 
     @Operation(description = "Find persons by parameters")
@@ -102,6 +107,24 @@ public class PersonController {
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
         csvService.saveFile(file);
+    }
+
+    @PatchMapping("/{id}")
+    @Operation(summary = "Partial entity update")
+    @io.swagger.v3.oas.annotations.parameters.RequestBody(
+            description = "Update fields in entity",
+            required = true,
+            content = @Content(
+                    mediaType = "application/json",
+                    schema = @Schema(
+                            type = "object",
+                            example = "{ \"name\": \"John\", \"surname\": \"Smith\", \"dateOfBirth\": \"2020-01-31\" }"
+                    )
+            )
+    )
+    // RFC 5789 — PATCH Method for HTTP
+    public PersonDTO patchData(@PathVariable Long id, @RequestBody Map<PersonDTO.FieldsToPatch, Object> fieldsToPatch) {
+        return personService.patchPerson(id, fieldsToPatch);
     }
 
     @GetMapping("/download")

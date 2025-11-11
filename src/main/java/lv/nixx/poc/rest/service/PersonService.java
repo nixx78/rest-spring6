@@ -8,11 +8,11 @@ import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -22,7 +22,12 @@ public class PersonService {
 
     private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
     private final Map<Long, PersonDTO> personMap = new ConcurrentHashMap<>();
-    private final Map<UUID, Integer[]> removeBatch = new HashMap<>();
+
+    private static final Map<PersonDTO.FieldsToPatch, BiConsumer<PersonDTO, Object>> PATCH_ACTIONS = Map.of(
+            PersonDTO.FieldsToPatch.name, (p, v) -> p.setName((String) v),
+            PersonDTO.FieldsToPatch.surname, (p, v) -> p.setSurname((String) v),
+            PersonDTO.FieldsToPatch.dateOfBirth, (p, v) -> p.setDateOfBirth(LocalDate.parse((CharSequence) v))
+    );
 
     public PersonService() {
 
@@ -57,15 +62,15 @@ public class PersonService {
         throw new PersonNotFoundException(id);
     }
 
-    public PersonDTO delete(Long id) {
+    public void delete(Long id) {
         if (personMap.containsKey(id)) {
-            return personMap.remove(id);
+            personMap.remove(id);
+        } else {
+            throw new PersonNotFoundException(id);
         }
-        throw new PersonNotFoundException(id);
     }
 
     public PersonDTO update(UpdatePersonRequest updateRequest) {
-
         Long personId = updateRequest.getId();
         if (!personMap.containsKey(personId)) {
             throw new PersonNotFoundException(personId);
@@ -75,6 +80,27 @@ public class PersonService {
 
     public Collection<PersonDTO> getAllPersons() {
         return personMap.values();
+    }
+
+    public PersonDTO patchPerson(Long personId, Map<PersonDTO.FieldsToPatch, Object> fieldsToPatch) {
+
+        PersonDTO originalPerson = Optional.ofNullable(personMap.get(personId))
+                .orElseThrow(() -> new PersonNotFoundException(personId));
+
+        PersonDTO person = originalPerson.toBuilder().build();
+
+        fieldsToPatch.forEach((field, value) -> {
+            BiConsumer<PersonDTO, Object> action = PATCH_ACTIONS.get(field);
+            if (action == null) {
+                throw new IllegalArgumentException("Unsupported field: " + field);
+            } else {
+                action.accept(person, value);
+            }
+        });
+
+        personMap.put(personId, person);
+
+        return person;
     }
 
 }

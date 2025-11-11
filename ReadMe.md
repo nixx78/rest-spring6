@@ -28,6 +28,7 @@ REST (Representational State Transfer) — архитектурный стиль
 Ответы содержат HTTP-коды:
 * 200 OK — успешно
 * 201 Created — создано
+* 204 No Content - содержимое не возращено, обычно возвращается при удалении сущности
 * 400 Bad Request — ошибка клиента
 * 404 Not Found — ресурс не найден
 * 500 Internal Server Error — ошибка сервера
