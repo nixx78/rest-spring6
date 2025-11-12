@@ -11,7 +11,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.atomic.AtomicInteger;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,7 +20,7 @@ import java.util.stream.Stream;
 @Component
 public class PersonService {
 
-    private static final AtomicInteger ID_GENERATOR = new AtomicInteger();
+    private static final AtomicLong ID_GENERATOR = new AtomicLong();
     private final Map<Long, PersonDTO> personMap = new ConcurrentHashMap<>();
 
     private static final Map<PersonDTO.FieldsToPatch, BiConsumer<PersonDTO, Object>> PATCH_ACTIONS = Map.of(
@@ -32,11 +32,11 @@ public class PersonService {
     public PersonService() {
 
         Map<Long, PersonDTO> v = Stream.of(
-                new PersonDTO(1L, "name1", "surname1", LocalDate.parse("1978-10-05")),
-                new PersonDTO(2L, "name2", "surname2", LocalDate.parse("1980-10-07")),
-                new PersonDTO(3L, "name3", "surname3", LocalDate.parse("1980-05-10")),
-                new PersonDTO(4L, "name4", "surname4", LocalDate.parse("1978-12-06")),
-                new PersonDTO(5L, "name5", "surname5", LocalDate.parse("1980-05-15"))
+                new PersonDTO(ID_GENERATOR.incrementAndGet(), "name1", "surname1", LocalDate.parse("1978-10-05")),
+                new PersonDTO(ID_GENERATOR.incrementAndGet(), "name2", "surname2", LocalDate.parse("1980-10-07")),
+                new PersonDTO(ID_GENERATOR.incrementAndGet(), "name3", "surname3", LocalDate.parse("1980-05-10")),
+                new PersonDTO(ID_GENERATOR.incrementAndGet(), "name4", "surname4", LocalDate.parse("1978-12-06")),
+                new PersonDTO(ID_GENERATOR.incrementAndGet(), "name5", "surname5", LocalDate.parse("1980-05-15"))
         ).collect(Collectors.toMap(PersonDTO::getId, Function.identity()));
 
         this.personMap.putAll(v);

@@ -1,4 +1,4 @@
-package lv.nixx.poc.rest.controller;
+package lv.nixx.poc.rest.controller.person;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -9,34 +9,27 @@ import lv.nixx.poc.rest.model.FindPersonsRequest;
 import lv.nixx.poc.rest.model.NewPersonRequest;
 import lv.nixx.poc.rest.model.PersonDTO;
 import lv.nixx.poc.rest.model.UpdatePersonRequest;
-import lv.nixx.poc.rest.service.CSVService;
 import lv.nixx.poc.rest.service.PersonService;
 import lv.nixx.poc.rest.validation.person.PersonNameSurname;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
 @RestController
 @Validated
 @RequestMapping("/person")
-public class PersonController {
+public class PersonCRUDController {
 
     private final PersonService personService;
-    private final CSVService csvService;
 
     @Autowired
-    public PersonController(PersonService personService, CSVService csvService) {
+    public PersonCRUDController(PersonService personService) {
         this.personService = personService;
-        this.csvService = csvService;
     }
 
     @Operation(description = "Get person by primary id")
@@ -104,11 +97,6 @@ public class PersonController {
         return "Processed:" + name + ":" + surname;
     }
 
-    @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-    public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        csvService.saveFile(file);
-    }
-
     @PatchMapping("/{id}")
     @Operation(summary = "Partial entity update")
     @io.swagger.v3.oas.annotations.parameters.RequestBody(
@@ -127,14 +115,5 @@ public class PersonController {
         return personService.patchPerson(id, fieldsToPatch);
     }
 
-    @GetMapping("/download")
-    public ResponseEntity<byte[]> downloadFile(@RequestParam(name = "filename", required = false) String filename) throws IOException {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.TEXT_PLAIN);
-        headers.setContentDispositionFormData("attachment", filename == null ? "persons.csv" : filename);
-
-        return new ResponseEntity<>(csvService.getDataForDownload(), headers, HttpStatus.OK);
-    }
 
 }

@@ -32,7 +32,7 @@ public class CSVService {
         this.personService = personService;
 
         this.csvFormatToRead = CSVFormat.DEFAULT.builder()
-                .setHeader("Name", "Surname", "DateOfBirth")
+                .setHeader("Name", "Surname", "DateOfBirth", "Type")
                 .setSkipHeaderRecord(true)
                 .build();
 
