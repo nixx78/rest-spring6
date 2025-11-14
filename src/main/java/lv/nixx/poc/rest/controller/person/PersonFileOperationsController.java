@@ -1,6 +1,6 @@
 package lv.nixx.poc.rest.controller.person;
 
-import lv.nixx.poc.rest.service.CSVService;
+import lv.nixx.poc.rest.service.PersonCSVService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -17,16 +17,16 @@ import java.io.IOException;
 @RequestMapping("/person")
 public class PersonFileOperationsController {
 
-    private final CSVService csvService;
+    private final PersonCSVService personCsvService;
 
     @Autowired
-    public PersonFileOperationsController(CSVService csvService) {
-        this.csvService = csvService;
+    public PersonFileOperationsController(PersonCSVService personCsvService) {
+        this.personCsvService = personCsvService;
     }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void handleFileUpload(@RequestParam("file") MultipartFile file) throws IOException {
-        csvService.saveFile(file);
+        personCsvService.saveFile(file);
     }
 
     @GetMapping("/download")
@@ -36,7 +36,7 @@ public class PersonFileOperationsController {
         headers.setContentType(MediaType.TEXT_PLAIN);
         headers.setContentDispositionFormData("attachment", filename == null ? "persons.csv" : filename);
 
-        return new ResponseEntity<>(csvService.getDataForDownload(), headers, HttpStatus.OK);
+        return new ResponseEntity<>(personCsvService.getDataForDownload(), headers, HttpStatus.OK);
     }
 
 }

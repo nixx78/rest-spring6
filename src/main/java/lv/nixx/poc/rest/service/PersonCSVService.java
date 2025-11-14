@@ -20,15 +20,15 @@ import java.util.List;
 import java.util.stream.StreamSupport;
 
 @Service
-public class CSVService {
+public class PersonCSVService {
 
-    private static final Logger log = LoggerFactory.getLogger(CSVService.class);
+    private static final Logger log = LoggerFactory.getLogger(PersonCSVService.class);
 
     private final CSVFormat csvFormatToRead;
     private final CSVFormat csvFormatToWrite;
     private final PersonService personService;
 
-    public CSVService(PersonService personService) {
+    public PersonCSVService(PersonService personService) {
         this.personService = personService;
 
         this.csvFormatToRead = CSVFormat.DEFAULT.builder()
